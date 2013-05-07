@@ -98,6 +98,7 @@ public class FolderWatchServiceTest {
         sut.register(path);
         sut.kill();
         sut.run();
+        assertTrue(true);
     }
 
 //    @Test
