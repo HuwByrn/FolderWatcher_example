@@ -98,10 +98,11 @@ public class FolderWatchServiceTest {
 
         sut.register(path);
         sut.kill();
-        sut.run();
+        sut.run(); // run is an infinite loop - should be put in a thread or executed on a Timer;
         // We never get here if the kill fails..
         assertTrue(true);
     }
+
 
 
     private WatchKey getWatchKey() {
