@@ -99,11 +99,11 @@ public class FolderWatchServiceTest {
         sut.register(path);
         sut.kill();
         sut.run();
+        // We never get here if the kill fails..
         assertTrue(true);
     }
 
-    //    @Test
-//    public void
+
     private WatchKey getWatchKey() {
         WatchKey key = mock(WatchKey.class);
 

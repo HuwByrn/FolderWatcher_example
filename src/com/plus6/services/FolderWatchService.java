@@ -11,13 +11,6 @@ import java.util.Map;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Huw
- * Date: 22/04/13
- * Time: 17:32
- * To change this template use File | Settings | File Templates.
- */
 public class FolderWatchService {
     private WatchService watcher;
     private Map<WatchKey, Path> keys;
@@ -62,17 +55,17 @@ public class FolderWatchService {
     public Map<WatchKey, Path> getKeys() {
         return keys;
     }
-    public void kill(){
-       this.stop = true;
+
+    public void kill() {
+        this.stop = true;
     }
+
     public void run() {
         while (false == this.stop) {
 
             WatchKey key;
 
-            System.out.println("WatchKey request before try");
             try {
-                System.out.println("WatchKey request in try ");
                 key = this.watcher.take();
 
             } catch (InterruptedException x) {
@@ -84,9 +77,11 @@ public class FolderWatchService {
             Path dir = keys.get(key);
             System.out.println("WatchKey request path to string " + dir.toString());
             if (dir == null) {
-                         System.err.println("WatchKey not recognized!!");
-                         continue;
-                     }
+                System.err.println("WatchKey not recognized!!");
+                continue;
+            }
+
+
         }
     }
 }
