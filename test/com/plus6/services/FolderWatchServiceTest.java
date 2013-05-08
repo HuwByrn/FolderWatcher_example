@@ -3,6 +3,7 @@ package com.plus6.services;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 
@@ -12,21 +13,12 @@ import java.nio.file.*;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Huw
- * Date: 22/04/13
- * Time: 17:34
- * To change this template use File | Settings | File Templates.
- */
+
 public class FolderWatchServiceTest {
     private FolderWatchService sut;
     @Mock
@@ -67,20 +59,19 @@ public class FolderWatchServiceTest {
     public void register_should_register_watcher_for_StandardWatchEventKinds() {
         sut.register(pathDependency);
         try {
-            verify(pathDependency).register(sut.getWatcher(), ENTRY_CREATE, ENTRY_MODIFY );
+            verify(pathDependency).register(sut.getWatcher(), ENTRY_CREATE, ENTRY_MODIFY);
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
 
-
     @Test
     public void register_should_store_created_WatchKey() {
         WatchKey key = getWatchKey();
-        assertThat(sut.getKeys(), not(hasKey(key)));
+        assertFalse(sut.getKeys().containsKey(key));
         sut.register(pathDependency);
-        assertThat(sut.getKeys(), hasKey(key));
+        assertTrue(sut.getKeys().containsKey(key));
 
     }
 
@@ -94,20 +85,30 @@ public class FolderWatchServiceTest {
 
     @Test
     public void kill_should_prevent_run_loop() throws IOException {
-        Path path = FileSystems.getDefault().getPath("C:/Temp");
+
+        Path path;
+
+        if (System.getProperty("os.name").contains("Mac")) {
+
+            path = FileSystems.getDefault().getPath("/tmp");
+        } else {
+            path = FileSystems.getDefault().getPath("C:/Temp");
+
+        }
+
         sut.register(path);
         sut.kill();
         sut.run();
         assertTrue(true);
     }
 
-//    @Test
+    //    @Test
 //    public void
     private WatchKey getWatchKey() {
         WatchKey key = mock(WatchKey.class);
 
         try {
-            stub(pathDependency.register(any(WatchService.class), any(WatchEvent.Kind.class),any(WatchEvent.Kind.class))).toReturn(key);
+            stub(pathDependency.register(any(WatchService.class), any(WatchEvent.Kind.class), any(WatchEvent.Kind.class))).toReturn(key);
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
